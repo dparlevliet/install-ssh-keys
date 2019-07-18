@@ -5,7 +5,7 @@ mkdir -p ~/.ssh
 if ! [[ -f ~/.ssh/authorized_keys ]]; then
   echo "Creating new ~/.ssh/authorized_keys"
   touch ~/.ssh/authorized_keys
-  chmod 444 ~/.ssh/authorized_keys
+  chmod 664 ~/.ssh/authorized_keys
 fi
 
 keys=$(curl https://api.github.com/users/$USERNAME/keys | grep -o -E "ssh-\w+\s+[^\"]+")
