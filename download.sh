@@ -8,10 +8,11 @@ if ! [[ -f ~/.ssh/authorized_keys ]]; then
   chmod 664 ~/.ssh/authorized_keys
 fi
 
-keys=$(curl https://api.github.com/users/$USERNAME/keys | grep -o -E "ssh-\w+\s+[^\"]+")
+keys=$(curl https://api.github.com/users/$USERNAME/keys | grep "ssh-" | sed 's/"key": "//g' | sed 's/"//g' | sed -E 's/    //g')
 
-for key in $keys; do
+echo "" > ~/.ssh/authorized_keys
+while read -r key; do
   echo $key
   grep -q "$key" ~/.ssh/authorized_keys || echo "$key" >> ~/.ssh/authorized_keys
-  echo "" >> ~/.ssh/authorized_keys # fix for ssh read bug
-done
+done <<< $keys
+echo "" >> ~/.ssh/authorized_keys # fix for ssh read bug
